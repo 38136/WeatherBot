@@ -1,0 +1,17 @@
+{
+  "name": "twitter_bot",
+  "version": "1.0.0",
+  "description": "chat bot application in twitter",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Anitha Senthilnathan",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "twit": "^2.2.9"
+  }
+}
