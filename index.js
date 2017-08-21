@@ -28,7 +28,7 @@ stream.on("direct_message", (directMsg) => {
     let directMessage = directMsg.direct_message;
     let sender_id = directms.sender_id_str;
     let screenName = directMessage.sender.name;
-    let txt = directMessage.text;
+    let text = directMessage.text;
 
     fs.writeFileSync("./app.json", JSON.stringify(directMsg), "utf-8");
     if (text) {
@@ -40,7 +40,7 @@ stream.on("direct_message", (directMsg) => {
             let result = response;
             if (responseQuery == "hi") {
                 let image_media = JSON.parse(uploadMedia.TwitterUpload());
-                welcomeMsg = weatherfunc.WelcomeParams(sender_id, screen_name);
+               let welcomeMsg = weatherfunc.WelcomeParams(sender_id, screenName);
                 T.post("direct_messages/events/new", welcomeMsg, function (err, data, response) {
                     stream.stop();
                     stream.start();
