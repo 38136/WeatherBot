@@ -13,6 +13,10 @@ var stream = Twitter.stream("user", { stringify_friend_ids: true });
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 stream.on('direct_message', function (directMsg) {
+    
+    
+    console.log("entered into stream");
+    console.log("DirectMsg ="+ directMsg);
     var directms = directMsg.direct_message;
     var sender_id = directms.sender_id_str;
     var screen_name = directms.sender.name;
