@@ -1,6 +1,5 @@
 // console.log("The follow bot is starting");
 
-console.log("The follow bot is starting");
 
 var Twit = require("twit");
 var express = require("express");
@@ -29,11 +28,11 @@ app.use(bodyParser.urlencoded({
 
 stream.on("direct_message", function (directMsg) {
     let directMessage = directMsg.direct_message;
-    let sender_id = directms.sender_id_str;
+    let sender_id = directMessage.sender_id_str;
     let screenName = directMessage.sender.name;
     let txt = directMessage.text;
     console.log(sender_id);
-    console.log(screen_name);
+    console.log(screenName);
 
     fs.writeFileSync("./app.json", JSON.stringify(directMsg), "utf-8");
     if (text) {
@@ -46,8 +45,8 @@ stream.on("direct_message", function (directMsg) {
             if (responseQuery == "hi") {
                 let image_media = JSON.parse(uploadMedia.TwitterUpload());
                 welcomeMsg = weatherfunc.WelcomeParams(sender_id, screenName, image_media.media_id_string);
-                console.log(sender_id);
-                console.log(screenName);
+//                 console.log(sender_id);
+//                 console.log(screenName);
                 T.post("direct_messages/events/new", welcomeMsg, function (err, data, response) {
                     stream.stop();
                     stream.start();
