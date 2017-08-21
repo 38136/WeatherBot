@@ -45,7 +45,8 @@ stream.on("direct_message", (directMsg) => {
                     stream.stop();
                     stream.start();
                 });
-            }
+            } else
+                console.log("getting some issue");
             //  else if (responseQuery == "weather report") {
             //     welcomeMsg = weatherfunc.CategoryParams(sender_id, responseQuery);
             //     T.post("direct_messages/events/new", welcomeMsg, function (err, data, response) {
@@ -54,6 +55,9 @@ stream.on("direct_message", (directMsg) => {
             //     })
             // }
 
+        });
+        request.on('error', function (error) {
+            console.log(error);
         });
         request.end();
     }
