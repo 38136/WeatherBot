@@ -4,7 +4,7 @@ const Twit = require("twit");
 const express = require("express");
 const bodyParser = require("body-parser");
 const apiai = require("apiai");
-const APIAII = apiai('4972cb1a09044d17b37a11401ee7dfe5');
+const APIAII = apiai('8e19b5f4bcee4ca484320e31dfdfebf9');
 const fs = require("fs");
 let weatherfunc = require('./weatherfunction');
 
@@ -40,7 +40,7 @@ stream.on("direct_message", (directMsg) => {
             let result = response;
             if (responseQuery == "hi") {
                 let image_media = JSON.parse(uploadMedia.TwitterUpload());
-                welcomeMsg = weatherfunc.WelcomeParams(sender_id, screen_name, image_media.media_id_string);
+                welcomeMsg = weatherfunc.WelcomeParams(sender_id, screen_name);
                 Twitter.post("direct_messages/events/new", welcomeMsg, function (err, data, response) {
                     stream.stop();
                     stream.start();
