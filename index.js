@@ -1,10 +1,10 @@
-console.log("The follow bot is starting");
+// console.log("The follow bot is starting");
 
 const Twit = require("twit");
 const express = require("express");
 const bodyParser = require("body-parser");
 const apiai = require("apiai");
-const APIAII = apiai('8e19b5f4bcee4ca484320e31dfdfebf9');
+const APIAII = apiai('4972cb1a09044d17b37a11401ee7dfe5');
 const fs = require("fs");
 let weatherfunc = require('./weatherfunction');
 
@@ -32,7 +32,7 @@ stream.on("direct_message", (directMsg) => {
 
     fs.writeFileSync("./app.json", JSON.stringify(directMsg), "utf-8");
     if (text) {
-        let request = APIAI.textRequest(text, {
+        let request = APIAII.textRequest(text, {
             sessionId: 'SessionBot'
         });
         request.on('response', (response) => {
@@ -45,21 +45,22 @@ stream.on("direct_message", (directMsg) => {
                     stream.stop();
                     stream.start();
                 });
-            } else if (responseQuery == "weather report") {
-                welcomeMsg = weatherfunc.CategoryParams(sender_id, responseQuery);
-                T.post("direct_messages/events/new", welcomeMsg, function (err, data, response) {
-                    stream.stop();
-                    stream.start();
-                })
             }
+            //  else if (responseQuery == "weather report") {
+            //     welcomeMsg = weatherfunc.CategoryParams(sender_id, responseQuery);
+            //     T.post("direct_messages/events/new", welcomeMsg, function (err, data, response) {
+            //         stream.stop();
+            //         stream.start();
+            //     })
+            // }
 
         });
         request.end();
     }
 })
 
-app.get("/",function(req,res){
-    res.send("Localhost Server is  running!!!");
+app.get("/", function (req, res) {
+    res.send("success");
 });
 app.listen(process.env.PORT || 3000, function (message) {
     console.log("Server is running on the port...");
