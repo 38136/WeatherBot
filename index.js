@@ -41,7 +41,7 @@ stream.on("direct_message", (directMsg) => {
             if (responseQuery == "hi") {
                 let image_media = JSON.parse(uploadMedia.TwitterUpload());
                 welcomeMsg = weatherfunc.WelcomeParams(sender_id, screen_name);
-                Twitter.post("direct_messages/events/new", welcomeMsg, function (err, data, response) {
+                T.post("direct_messages/events/new", welcomeMsg, function (err, data, response) {
                     stream.stop();
                     stream.start();
                 });
