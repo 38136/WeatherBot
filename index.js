@@ -1,54 +1,66 @@
 console.log("The follow bot is starting");
 
 const Twit = require("twit");
+const express = require("express");
+const bodyParser = require("body-parser");
+const apiai = require("apiai");
+const APIAII = apiai('4972cb1a09044d17b37a11401ee7dfe5');
+const fs = require("fs");
+let weatherfunc = require('./weatherfunction');
+
+// var uploadMedia = require("./uploadimage");
+
+let app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 const config = require("./config");
+
 let T = new Twit(config);
-// console.log(config);
-// ---------------------------
-// let params = {
-//     q : "rainbow",
-//     count : 2
-// };
+// console.log(T);
 
-// T.get("search/tweets", params, gotData);
+let stream = T.stream("user", {
+    stringify_friend_ids: true
+});
 
-// function gotData(err, data, response) {
-//     let tweets = data.statuses;
-//     for (let i =0;i<tweets.length;i++){
-//         console.log(tweets[i].text)
-//     }
-// }
-//-----------------------
+stream.on("direct_message", (directMsg) => {
+    let directMessage = directMsg.direct_message;
+    let sender_id = directms.sender_id_str;
+    let screenName = directMessage.sender.name;
+    let txt = directMessage.text;
 
-let stream = T.stream("user");
-stream.on('follow', followed);
+    fs.writeFileSync("./app.json", JSON.stringify(directMsg), "utf-8");
+    if (text) {
+        let request = APIAI.textRequest(text, {
+            sessionId: 'SessionBot'
+        });
+        request.on('response', (response) => {
+            let responseQuery = response.result.resolvedQuery;
+            let result = response;
+            if (responseQuery == "hi") {
+                let image_media = JSON.parse(uploadMedia.TwitterUpload());
+                welcomeMsg = weatherfunc.WelcomeParams(sender_id, screen_name, image_media.media_id_string);
+                Twitter.post("direct_messages/events/new", welcomeMsg, function (err, data, response) {
+                    stream.stop();
+                    stream.start();
+                });
+            } else if (responseQuery == "weather report") {
+                welcomeMsg = weatherfunc.CategoryParams(sender_id, responseQuery);
+                T.post("direct_messages/events/new", welcomeMsg, function (err, data, response) {
+                    stream.stop();
+                    stream.start();
+                })
+            }
 
-function followed(eventMsg){
-    console.log('Follow event');
-let name = eventMsg.source.name;
-let screenName = eventMsg.source.screen_name;
-tweetIt('. @'+ screenName + 'do you like rainbows ?');
-
-}
-
-
-
-// tweetIt();
-// setInterval(tweetIt,1000*60*60);
-function tweetIt(txt) {
-    // let r = Math.floor(Math.random() * 100);
-    let tweet = {
-        // status: "#coding the random number "+ r +" Rainbow from node.js"
-        status: txt
-    };
-
-    T.post("statuses/update", tweet, tweeted)
-
-    function tweeted(err, data, response) {
-        if (err) {
-            console.log("something went wrong");
-        } else {
-            console.log(" it working");
-        }
+        });
+        request.end();
     }
-}
+})
+
+app.get("/",function(req,res){
+    res.send("Localhost Server is  running!!!");
+});
+app.listen(process.env.PORT || 3000, function (message) {
+    console.log("Server is running on the port...");
+})
