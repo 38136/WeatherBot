@@ -1,75 +1,60 @@
-// console.log("The follow bot is starting");
-
-
-var Twit = require("twit");
-var express = require("express");
-var bodyParser = require("body-parser");
-var apiai = require("apiai");
+var twit = require('twit');
+var express = require('express');
+var bodyParser=require('body-parser');
+var app = express();
+var config = require('./config');
+var apiai = require('apiai');
 var APIAII = apiai('8e19b5f4bcee4ca484320e31dfdfebf9');
+var Twitter = new twit(config);
 var fs = require("fs");
-let weatherfunc = require('./weatherfunction');
-let uploadMedia = require("./uploadpic");
- 
-const config = require("./config");
-
-let app = express();
-let T = new Twit(config);
-
-let stream = T.stream("user", {
-    stringify_friend_ids: true
-
-});
-
+var botfunction = require('./weatherfunction');
+var uploadMedia = require("./uploadpic");
+var stream = Twitter.stream("user", { stringify_friend_ids: true });
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
-// console.log(T);
-
-stream.on("direct_message", function (directMsg) {
-    let directMessage = directMsg.direct_message;
-    let sender_id = directMessage.sender_id_str;
-    let screenName = directMessage.sender.name;
-    let txt = directMessage.text;
-    console.log(sender_id);
-    console.log(screenName);
-
-    fs.writeFileSync("./app.json", JSON.stringify(directMsg), "utf-8");
+app.use(bodyParser.urlencoded({ extended: true }));
+stream.on('direct_message', function (directMsg) {
+    var directms = directMsg.direct_message;
+    var sender_id = directms.sender_id_str;
+    var screen_name = directms.sender.name;
+    var text = directms.text;
+    var paramssend;
+    console.log("Text is "+text);
+    //console.log(JSON.stringify(directms.sender));
+    //console.log(JSON.stringify(directMsg));
+    fs.writeFileSync("./data.json", JSON.stringify(directMsg), "utf8");
     if (text) {
-        let request = APIAII.textRequest(text, {
-            sessionId: 'SessionBot'
+        var request = APIAII.textRequest(text, {
+            sessionId: 'APIAISESSID'
         });
         request.on('response', function (response) {
             let responseQuery = response.result.resolvedQuery;
             let result = response;
-            if (responseQuery == "hi") {
-                let image_media = JSON.parse(uploadMedia.TwitterUpload());
-                welcomeMsg = weatherfunc.WelcomeParams(sender_id, screenName, image_media.media_id_string);
-//                 console.log(sender_id);
-//                 console.log(screenName);
-                T.post("direct_messages/events/new", welcomeMsg, function (err, data, response) {
+            // console.log(response.result);
+            //console.log(text + "= >" + responseQuery);
+            if (text == "hi") {
+                var image_media = JSON.parse(uploadMedia.TwitterUpload());
+                paramssend = botfunction.WelcomeParams(sender_id, screen_name, image_media.media_id_string);
+                Twitter.post("direct_messages/events/new", paramssend, function (err, data, response) {
                     stream.stop();
                     stream.start();
-                });
+                })
             }
-            //  else if (responseQuery == "weather report") {
-            //     welcomeMsg = weatherfunc.CategoryParams(sender_id, responseQuery);
-            //     T.post("direct_messages/events/new", welcomeMsg, function (err, data, response) {
-            //         stream.stop();
-            //         stream.start();
-            //     })
-            // }
-
+            
         });
+           
+      
+            
+          
         request.on('error', function (error) {
-            console.log(error);
+            //        console.log(error);
         });
         request.end();
     }
-})
 
-app.get("/", function (req, res) {
-    res.send("success");
+});
+
+app.get("/",function(req,res){
+    res.send("Localhost Server is  running!!!");
 });
 app.listen(process.env.PORT || 3000, function (message) {
     console.log("Server is running on the port...");
