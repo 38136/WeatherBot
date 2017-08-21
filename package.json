@@ -1,7 +1,7 @@
 {
-  "name": "twitter_bot",
+  "name": "weather__bot_twitter",
   "version": "1.0.0",
-  "description": "chat bot application in twitter",
+  "description": "weather bot",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -10,6 +10,7 @@
   "author": "Anitha Senthilnathan",
   "license": "ISC",
   "dependencies": {
+    "apiai": "^4.0.3",
     "body-parser": "^1.17.2",
     "express": "^4.15.4",
     "twit": "^2.2.9"
