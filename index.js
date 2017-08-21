@@ -7,8 +7,7 @@ const apiai = require("apiai");
 const APIAII = apiai('8e19b5f4bcee4ca484320e31dfdfebf9');
 const fs = require("fs");
 let weatherfunc = require('./weatherfunction');
-
-// var uploadMedia = require("./uploadimage");
+let  uploadMedia = require("./uploadpic");
 
 let app = express();
 app.use(bodyParser.json());
